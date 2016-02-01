@@ -22,13 +22,16 @@ form.link, form.button {
 .header {
   border-bottom: 1px solid #e5e5e5;
 }
+.header h1 {
+  font-family: 'Kaushan Script', cursive;
+}
 .logo {
-  width: 519px;
-  height: 71px;
+  width: 75px;
+  height: 75px;
   display: inline-block;
   margin-bottom: 1em;
-  background-image: url("/images/phoenix.png");
-  background-size: 519px 71px;
+  background-image: url("/images/tea28.png");
+  background-size: 75px 75px;
 }
 
 /* Everything but the jumbotron gets side spacing for mobile first views */

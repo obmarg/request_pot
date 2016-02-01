@@ -17,3 +17,9 @@ Ready to run in production? Please [check our deployment guides](http://www.phoe
   * Docs: http://hexdocs.pm/phoenix
   * Mailing list: http://groups.google.com/group/phoenix-talk
   * Source: https://github.com/phoenixframework/phoenix
+
+## Thanks
+
+- Icon made by [Freepik](http://www.freepik.com) from
+  [www.flaticon.com](http://www.flaticon.com) is licensed under [CC BY
+  3.0](http://creativecommons.org/licenses/by/3.0/)
