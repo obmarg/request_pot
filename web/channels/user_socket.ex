@@ -2,7 +2,7 @@ defmodule RequestPot.UserSocket do
   use Phoenix.Socket
 
   ## Channels
-  # channel "rooms:*", RequestPot.RoomChannel
+  channel "pot:*", RequestPot.PotChannel
 
   ## Transports
   transport :websocket, Phoenix.Transports.WebSocket
