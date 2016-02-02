@@ -1,6 +1,6 @@
 module PotScreen (Model, init, view) where
 
-import List exposing (isEmpty)
+import List exposing (isEmpty, map)
 import Html exposing (text, p, section, h4, input, div)
 import Html.Attributes exposing (class, style, type', value, readonly)
 
@@ -18,8 +18,8 @@ init = Model []
 
 -- Update
 
--- TODO: So, want a centered text box w/ the pot URL in it.
--- Then optionally the requests that have been made.
+-- View
+
 view : Model -> Html.Html
 view model =
   let
@@ -40,7 +40,11 @@ viewPotUrl = section []
 
 viewRequests : Requests -> Html.Html
 viewRequests requests =
-  text "Some Requests1"
+  div [] (map viewRequest requests)
+
+viewRequest : Request -> Html.Html
+viewRequest request =
+  p [] [ text ("A request! " ++ request) ]
 
 viewNoRequests : Html.Html
 viewNoRequests =

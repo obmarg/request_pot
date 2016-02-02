@@ -1,13 +1,24 @@
 module RequestPot where
 
+import Effects exposing (Effects, Never)
 import Html exposing (text)
-import StartApp.Simple as StartApp
+import StartApp
 
 import IntroScreen
 import PotScreen
 
-main =
-  StartApp.start { model = init, view = view, update = update }
+-- App
+
+app : StartApp.App Model
+app =
+  StartApp.start
+    { init = init
+    , view = view
+    , update = update
+    , inputs = [ incomingRequests ]
+    }
+
+main = app.html
 
 -- Model
 
@@ -18,24 +29,39 @@ type alias Model =
   , intro: IntroScreen.Model
   , pot: PotScreen.Model }
 
-init : Model
-init = Model IntroScreenActive IntroScreen.init PotScreen.init
+init : (Model, Effects Action)
+init = ( Model IntroScreenActive IntroScreen.init PotScreen.init
+       , Effects.none
+       )
 
 -- Update
 
 type Action
-  = Intro IntroScreen.Action
+  = IntroScreenAction IntroScreen.Action
   | Create
+  | SetRequests (List String)
 
-update : Action -> Model -> Model
+update : Action -> Model -> (Model, Effects Action)
 update action model =
   case action of
-    Intro act ->
-      { model |
+    IntroScreenAction act ->
+      ( { model |
           intro = IntroScreen.update act model.intro }
+      , Effects.none
+      )
 
     Create ->
-      { model | activeScreen = PotScreenActive }
+      ( { model | activeScreen = PotScreenActive }
+      , Effects.none
+      )
+
+    SetRequests requests ->
+      let
+        pot = model.pot
+        updatedPot = { pot | requests = requests }
+      in
+        ( { model | pot = updatedPot }
+        , Effects.none )
 
 -- View
 
@@ -46,10 +72,18 @@ view address model =
       let
         context =
           IntroScreen.Context
-            (Signal.forwardTo address Intro)
+            (Signal.forwardTo address IntroScreenAction)
             (Signal.forwardTo address (always Create))
       in
         IntroScreen.view context
 
     PotScreenActive ->
       PotScreen.view model.pot
+
+-- Signals
+
+port requests : Signal (List String)
+
+incomingRequests : Signal Action
+incomingRequests =
+  Signal.map SetRequests requests
