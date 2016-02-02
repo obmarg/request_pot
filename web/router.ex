@@ -19,6 +19,9 @@ defmodule RequestPot.Router do
     get "/", PageController, :index
   end
 
+  forward "/pot/", RequestPot.RequestHandler
+
+
   # Other scopes may use custom stacks.
   # scope "/api", RequestPot do
   #   pipe_through :api
