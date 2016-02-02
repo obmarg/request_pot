@@ -1,8 +1,8 @@
-module Components.IntroBox (Model, init, Action, update, view) where
+module Components.IntroBox (Model, init, Action, update, Context, view) where
 
 import Html exposing (div, p, button, br, h2, text, input)
 import Html.Attributes exposing (class, type')
-import Html.Events exposing (on, targetChecked)
+import Html.Events exposing (on, targetChecked, onClick)
 
 -- Model
 
@@ -28,20 +28,28 @@ update action model =
 
 -- View
 
+type alias Context =
+  { actions: Signal.Address Action
+  , create: Signal.Address () }
+
 onCheck : Signal.Address Action -> Html.Attribute
 onCheck address =
   let
     boolToAction = \bool -> if bool then SetPrivate else SetNotPrivate
   in
-    on "input" targetChecked (\bool -> Signal.message address (boolToAction bool))
+    on "click" targetChecked (\bool -> Signal.message address (boolToAction bool))
 
-view : Signal.Address Action -> Html.Html
-view address =
+view : Context -> Html.Html
+view context =
   div [ class "jumbotron" ]
       [ h2 [] [ (text "Welcome to Request Pot!") ]
       , p [ class "lead" ] [ text "A requestb.in clone written using phoenix & elm."]
-      , button [ class "btn btn-success" ] [ text "Create a Pot" ]
+      , successButton (onClick context.create ()) "Create a Pot"
       , br [] []
-      , input [ type' "checkbox", onCheck address ] []
+      , input [ type' "checkbox", onCheck context.actions ] []
       , text "Private Pot (only viewable from this browser)"
       ]
+
+successButton : Html.Attribute -> String -> Html.Html
+successButton clickHandler btnText =
+  button [ class "btn btn-success", clickHandler ] [ text btnText ]
