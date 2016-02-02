@@ -1,4 +1,4 @@
-module Components.IntroBox (Model, init, Action, update, Context, view) where
+module IntroScreen (Model, init, Action, update, Context, view) where
 
 import Html exposing (div, p, button, br, h2, text, input)
 import Html.Attributes exposing (class, type')

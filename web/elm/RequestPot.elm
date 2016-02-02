@@ -2,26 +2,29 @@ module RequestPot where
 
 import Html exposing (text)
 import StartApp.Simple as StartApp
-import Components.IntroBox
+
+import IntroScreen
+import PotScreen
 
 main =
   StartApp.start { model = init, view = view, update = update }
 
 -- Model
 
-type Screen = IntroScreen | PotScreen
+type ActiveScreen = IntroScreenActive | PotScreenActive
 
 type alias Model =
-  { intro: Components.IntroBox.Model
-  , screen: Screen }
+  { activeScreen: ActiveScreen
+  , intro: IntroScreen.Model
+  , pot: PotScreen.Model }
 
 init : Model
-init = Model Components.IntroBox.init IntroScreen
+init = Model IntroScreenActive IntroScreen.init PotScreen.init
 
 -- Update
 
 type Action
-  = Intro Components.IntroBox.Action
+  = Intro IntroScreen.Action
   | Create
 
 update : Action -> Model -> Model
@@ -29,23 +32,24 @@ update action model =
   case action of
     Intro act ->
       { model |
-          intro = Components.IntroBox.update act model.intro }
+          intro = IntroScreen.update act model.intro }
 
     Create ->
-      { model | screen = PotScreen }
+      { model | activeScreen = PotScreenActive }
 
 -- View
 
+view : Signal.Address Action -> Model -> Html.Html
 view address model =
-  case model.screen of
-    IntroScreen ->
+  case model.activeScreen of
+    IntroScreenActive ->
       let
         context =
-          Components.IntroBox.Context
+          IntroScreen.Context
             (Signal.forwardTo address Intro)
             (Signal.forwardTo address (always Create))
       in
-        Components.IntroBox.view context
+        IntroScreen.view context
 
-    PotScreen ->
-      if model.intro.private then text "A private request pot" else text "A request pot"
+    PotScreenActive ->
+      PotScreen.view model.pot
