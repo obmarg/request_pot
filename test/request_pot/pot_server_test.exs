@@ -23,4 +23,10 @@ defmodule RequestPot.PotServerTest do
   test "pot server can return its info" do
     assert PotServer.info(@server_name) == @server_info
   end
+
+  test "pot server can store incoming requests" do
+    PotServer.incoming_request(@server_name, :test1)
+    PotServer.incoming_request(@server_name, :test2)
+    assert PotServer.requests(@server_name) == [:test2, :test1]
+  end
 end

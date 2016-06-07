@@ -9,7 +9,15 @@ defmodule RequestPot.PotServer do
   alias RequestPot.PotInfo
 
   def info(name) do
-    name |> proc_name |> GenServer.call(:get_info)
+    call(name, :get_info)
+  end
+
+  def requests(name) do
+    call(name, :get_requests)
+  end
+
+  def incoming_request(name, request) do
+    call(name, {:incoming_request, request})
   end
 
   def exists?(name) do
@@ -36,6 +44,17 @@ defmodule RequestPot.PotServer do
     {:reply, %{starting_info | request_count: length(requests)}, state}
   end
 
+  def handle_call(:get_requests, _from, state) do
+    {:reply, state.requests, state}
+  end
+
+  def handle_call({:incoming_request, request}, _from, state) do
+    requests = state.requests
+
+    {:reply, :ok, %{state | requests: [request | requests]}}
+  end
+
+
   defp proc_name(%PotInfo{name: name}) do
     proc_name(name)
   end
@@ -46,5 +65,9 @@ defmodule RequestPot.PotServer do
 
   defp gproc_name(name) do
     {:n, :l, "pot.#{name}"}
+  end
+
+  defp call(name, value) do
+    name |> proc_name |> GenServer.call(value)
   end
 end
