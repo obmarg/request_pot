@@ -19,6 +19,12 @@ defmodule RequestPot.Router do
     get "/", PageController, :index
   end
 
+  scope "/api/v1", RequestPot do
+    pipe_through :api
+
+    resources "/pots", PotController, only: [:create, :show]
+  end
+
   forward "/pot/", RequestPot.RequestHandler
 
 
