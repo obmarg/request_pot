@@ -37,6 +37,9 @@ defmodule RequestPot.Mixfile do
      {:gettext, "~> 0.9"},
      {:cowboy, "~> 1.0"},
      {:gproc, "~> 0.5.0"},
-     {:poison, "~> 2.1"}]
+     {:poison, "~> 2.1"},
+
+     {:exrm, "~> 1.0"}
+    ]
   end
 end
