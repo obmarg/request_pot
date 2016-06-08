@@ -11,7 +11,7 @@ defmodule RequestPot.RequestControllerTest do
   end
 
   setup do
-    {:ok, _pid} = PotServer.start_link(@pot_name)
+    {:ok, _pid} = @pot_name |> PotInfo.from_name |> PotServer.start_link
     @requests |> Enum.map(&PotServer.incoming_request @pot_name, &1)
 
     {:ok, %{}}

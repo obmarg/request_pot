@@ -12,4 +12,11 @@ defmodule RequestPot.PotInfo do
     time_created: number,
     request_count: number
   }
+
+  @moduledoc """
+  Constructs a PotInfo from a name.
+  """
+  def from_name(name) do
+    %__MODULE__{name: name, time_created: :erlang.monotonic_time()}
+  end
 end

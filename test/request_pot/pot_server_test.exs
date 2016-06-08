@@ -7,7 +7,7 @@ defmodule RequestPot.PotServerTest do
   @server_info %PotInfo{name: @server_name}
 
   setup do
-    {:ok, _pid} = PotServer.start_link(@server_info)
+    {:ok, _pid} = @server_name |> PotInfo.from_name |> PotServer.start_link
 
     {:ok, %{}}
   end
@@ -21,7 +21,11 @@ defmodule RequestPot.PotServerTest do
   end
 
   test "pot server can return its info" do
-    assert PotServer.info(@server_name) == @server_info
+    info = PotServer.info(@server_name)
+    assert info.name == @server_name
+    assert info.request_count == 0
+    assert info.time_created
+    refute info.private
   end
 
   test "pot server can store incoming requests" do

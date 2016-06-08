@@ -6,9 +6,7 @@ defmodule RequestPot.RequestHandlerTest do
   setup do
     name = "test_pot"
 
-    {:ok, _pid} = PotServer.start_link(
-      %PotInfo{name: name}
-    )
+    {:ok, _pid} = name |> PotInfo.from_name |> PotServer.start_link
 
     {:ok, %{name: name}}
   end

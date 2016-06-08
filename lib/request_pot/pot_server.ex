@@ -7,6 +7,7 @@ defmodule RequestPot.PotServer do
   use GenServer
 
   alias RequestPot.PotInfo
+  alias RequestPot.PotServer.Terminator
 
   def info(name) do
     call(name, :get_info)
@@ -35,6 +36,7 @@ defmodule RequestPot.PotServer do
   end
 
   def init(info) do
+    Terminator.start_link(self, info)
     {:ok, %{starting_info: info, requests: []}}
   end
 
