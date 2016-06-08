@@ -31,7 +31,13 @@ defmodule RequestPot.PotSupervisor do
   end
 
   defp new_pot_name do
-    # TODO: Could definitely have friendlier names...
-    8 |> :crypto.strong_rand_bytes |> Base.encode64
+    name = 'abcdefghijlkmnopqrstuvwxyz123456789'
+    |> Enum.take_random(8)
+    |> List.to_string
+
+    case PotServer.exists?(name) do
+      true -> new_pot_name
+      false -> name
+    end
   end
 end
