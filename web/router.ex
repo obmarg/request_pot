@@ -28,6 +28,10 @@ defmodule RequestPot.Router do
 
     resources "/pots", PotController, only: [:create, :show]
     resources "/pots/:pot_id/requests", RequestController, only: [:index, :show]
+
+    # Also expose "pots" through "bins" for requestb.in compatability.
+    resources "/bins", PotController, only: [:create, :show]
+    resources "/bins/:pot_id/requests", RequestController, only: [:index, :show]
   end
 
   forward "/pot/", RequestPot.RequestHandler
