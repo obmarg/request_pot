@@ -48,18 +48,24 @@ config :logger, level: :info
 # If you are doing OTP releases, you need to instruct Phoenix
 # to start the server for all endpoints:
 #
-#     config :phoenix, :serve_endpoints, true
+config :phoenix, :serve_endpoints, true
 #
 # Alternatively, you can configure exactly which server to
 # start per endpoint:
 #
-#     config :request_pot, RequestPot.Endpoint, server: true
+# config :request_pot, RequestPot.Endpoint, server: true
 #
 # You will also need to set the application root to `.` in order
 # for the new static assets to be served after a hot upgrade:
 #
-#     config :request_pot, RequestPot.Endpoint, root: "."
+config :request_pot, RequestPot.Endpoint, root: "."
 
 # Finally import the config/prod.secret.exs
 # which should be versioned separately.
-import_config "prod.secret.exs"
+if File.exists?("config/prod.secret.exs") do
+  import_config "prod.secret.exs"
+else
+  # If we don't have a prod.secret.exs load from environment.
+  config :request_pot, RequestPot.Endpoint,
+    secret_key_base: {:system, "SECRET_KEY_BASE"}
+end
