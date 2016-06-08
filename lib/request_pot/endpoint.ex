@@ -23,9 +23,8 @@ defmodule RequestPot.Endpoint do
   plug Plug.Logger
 
   plug Plug.Parsers,
-    parsers: [:urlencoded, :multipart, :json],
-    pass: ["*/*"],
-    json_decoder: Poison
+    parsers: [:urlencoded, :multipart],
+    pass: ["*/*"]
 
   plug Plug.MethodOverride
   plug Plug.Head

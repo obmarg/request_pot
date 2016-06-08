@@ -4,8 +4,8 @@ defmodule RequestPot.Request do
   """
 
   defstruct [
-    :method, :content_type, :headers, :path, :query_string, :id, :body_params,
-    :body, :remote_addr, :time, :content_length
+    :method, :content_type, :headers, :path, :query_string, :id, :form_data,
+    :json_data, :body, :remote_addr, :time, :content_length
   ]
 
   @type t :: %__MODULE__{
@@ -15,7 +15,8 @@ defmodule RequestPot.Request do
     path: String.t,
     query_string: %{String.t => String.t},
     id: String.t,
-    body_params: %{String.t => String.t},
+    form_data: %{String.t => String.t},
+    json_data: %{String.t => String.t},
     body: String.t,
     remote_addr: String.t,
     time: float,

@@ -41,18 +41,37 @@ defmodule RequestPot.RequestHandlerTest do
     assert_request name, method: "POST"
   end
 
-  test "POST /pot/:name with json", %{conn: conn, name: name} do
+  test "POST /pot/:name with JSON", %{conn: conn, name: name} do
+    body = Poison.encode!(%{"test" => "data"})
     conn =
       conn
       |> put_req_header("content-type", "application/json")
-      |> post("/pot/#{name}", Poison.encode!(%{"test" => "data"}))
+      |> post("/pot/#{name}", body)
 
     assert conn.status == 200
     assert_request name,
       method: "POST",
       headers: %{"content-type" => "application/json"},
       content_type: "application/json",
-      body_params: %{"test" => "data"}
+      json_data: %{"test" => "data"},
+      body: body
+  end
+
+  test "POST /pot/:name with invalid JSON", %{conn: conn, name: name} do
+    body = "{'test': 'whatever'}"
+
+    conn =
+      conn
+      |> put_req_header("content-type", "application/json")
+      |> post("/pot/#{name}", body)
+
+    assert conn.status == 200
+    assert_request name,
+      method: "POST",
+      headers: %{"content-type" => "application/json"},
+      content_type: "application/json",
+      json_data: nil,
+      body: body
   end
 
   test "POST /pot/:name with raw data", %{conn: conn, name: name} do
@@ -80,7 +99,7 @@ defmodule RequestPot.RequestHandlerTest do
       method: "POST",
       headers: %{"content-type" => "application/x-www-form-urlencoded"},
       content_type: "application/x-www-form-urlencoded",
-      body_params: %{"form" => "data", "something" => "other"}
+      form_data: %{"form" => "data", "something" => "other"}
   end
 
   test "PUT /pot/:name", %{conn: conn, name: name} do
@@ -108,7 +127,8 @@ defmodule RequestPot.RequestHandlerTest do
       content_type: nil,
       path: "/" <> pot_name,
       query_string: %{},
-      body_params: %{},
+      form_data: %{},
+      json_data: nil,
       body: ""
     }
 

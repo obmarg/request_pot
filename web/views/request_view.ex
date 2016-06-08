@@ -16,7 +16,8 @@ defmodule RequestPot.RequestView do
       path: request.path,
       query_string: request.query_string,
       id: request.id,
-      body_params: request.body_params,
+      form_data: request.form_data,
+      json_data: request.json_data,
       body: request.body,
       remote_addr: request.remote_addr,
       time: request.time}

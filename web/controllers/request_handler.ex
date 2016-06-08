@@ -17,14 +17,17 @@ defmodule RequestPot.RequestHandler do
         body_params -> body_params
       end
 
+    content_type = conn |> get_req_header("content-type") |> List.first
+
     req = %Request{
       method: conn.method,
-      content_type: conn |> get_req_header("content-type") |> List.first,
+      content_type: content_type,
       headers: Map.new(conn.req_headers),
       path: "/" <> Enum.join(conn.path_info),
       query_string: Map.new(conn.query_params),
       id: conn |> get_resp_header("x-request-id") |> List.first,
-      body_params: body_params,
+      form_data: body_params,
+      json_data: maybe_parse_json(content_type, body),
       body: body,
       remote_addr: peer_to_string(conn.peer),
       time: :erlang.system_time(:seconds),
@@ -45,5 +48,19 @@ defmodule RequestPot.RequestHandler do
 
   defp peer_to_string({{a, b, c, d}, _port}) do
     "#{a}.#{b}.#{c}.#{d}"
+  end
+
+  @spec maybe_parse_json(String.t, <<>>) :: Poison.Parser.t | nil
+  defp maybe_parse_json(nil, _), do: nil
+  defp maybe_parse_json(content_type, body) do
+    [type, subtype] = String.split(content_type, "/")
+    if subtype == "json" or String.ends_with?(subtype, "+json") do
+      case Poison.decode(body) do
+        {:ok, val} -> val
+        _ -> nil
+      end
+    else
+      nil
+    end
   end
 end

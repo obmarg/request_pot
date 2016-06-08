@@ -11,6 +11,10 @@ defmodule RequestPot.Router do
 
   pipeline :api do
     plug :accepts, ["json"]
+    plug Plug.Parsers,
+      parsers: [:json],
+      pass: ["*/*"],
+      json_decoder: Poison
   end
 
   scope "/", RequestPot do
