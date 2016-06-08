@@ -6,6 +6,8 @@ defmodule RequestPot.PotServer do
   """
   use GenServer
 
+  @max_requests 20
+
   alias RequestPot.PotInfo
   alias RequestPot.PotServer.Terminator
 
@@ -51,9 +53,9 @@ defmodule RequestPot.PotServer do
   end
 
   def handle_call({:incoming_request, request}, _from, state) do
-    requests = state.requests
+    requests = Enum.take([request | state.requests], @max_requests)
 
-    {:reply, :ok, %{state | requests: [request | requests]}}
+    {:reply, :ok, %{state | requests: requests}}
   end
 
 
