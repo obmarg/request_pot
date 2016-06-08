@@ -23,6 +23,7 @@ defmodule RequestPot.Router do
     pipe_through :api
 
     resources "/pots", PotController, only: [:create, :show]
+    resources "/pots/:pot_id/requests", RequestController, only: [:index, :show]
   end
 
   forward "/pot/", RequestPot.RequestHandler

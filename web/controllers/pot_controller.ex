@@ -19,8 +19,6 @@ defmodule RequestPot.PotController do
   end
 
   def show(conn, %{"id" => id}) do
-    require Logger
-    Logger.info("ID => #{id}")
     case PotServer.exists?(id) do
       true ->
         pot = PotServer.info(id)
