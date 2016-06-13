@@ -9,6 +9,6 @@ mkdir -p $DEST
 cd $DEST
 if [[ ! -e request_pot-${VERSION}-nixos.tar.gz ]]; then
     wget https://github.com/obmarg/request_pot/releases/download/v${VERSION}/request_pot-${VERSION}-nixos.tar.gz
-    tar xvzf request_pot-${VERSION}-nixos.tar.gz
+    tar xzf request_pot-${VERSION}-nixos.tar.gz
 fi
 ./bin/request_pot foreground

@@ -23,6 +23,7 @@ deploy:
   file:
     - "request_pot-${TRAVIS_TAG:1}-ubuntu.tar.gz"
     - "request_pot-${TRAVIS_TAG:1}-nixos.tar.gz"
+    - "scripts/nixos-run.sh"
   skip_cleanup: true
   on:
     tags: true
