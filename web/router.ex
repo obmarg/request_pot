@@ -7,6 +7,7 @@ defmodule RequestPot.Router do
     plug :fetch_flash
     plug :protect_from_forgery
     plug :put_secure_browser_headers
+    plug :put_user_token
   end
 
   pipeline :api do
@@ -36,9 +37,11 @@ defmodule RequestPot.Router do
 
   forward "/pot/", RequestPot.RequestHandler
 
+  defp put_user_token(conn, _) do
+    token = Phoenix.Token.sign(
+      conn, "user", Plug.Conn.get_session(conn, :user_id)
+    )
+    assign(conn, :user_token, token)
+  end
 
-  # Other scopes may use custom stacks.
-  # scope "/api", RequestPot do
-  #   pipe_through :api
-  # end
 end

@@ -25,3 +25,5 @@ node_modules/
 
 web/elm/elm-stuff/
 web/static/vendor/requestpot.js
+
+rel/request_pot/
