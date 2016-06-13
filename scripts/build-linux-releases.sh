@@ -2,7 +2,6 @@
 rm rel/relx.config
 
 MIX_ENV=prod mix compile
-brunch b
 MIX_ENV=prod mix phoenix.digest
 
 MIX_ENV=prod mix release

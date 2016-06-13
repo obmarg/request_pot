@@ -13,8 +13,8 @@ before_script:
   - npm install
   - export PATH=$PATH:$PWD/node_modules/.bin/
 script:
-  - brunch b
   - mix test
+  - brunch b
 before_deploy: ./scripts/build-linux-releases.sh
 deploy:
   provider: releases
