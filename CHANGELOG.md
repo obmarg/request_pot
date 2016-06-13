@@ -1,3 +1,8 @@
+0.1.2 (13/06/2016)
+---
+
+- Actually fixed building of frontend releases on travis.
+
 0.1.1 (13/06/2016)
 ---
 
