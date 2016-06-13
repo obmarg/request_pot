@@ -6,7 +6,12 @@ otp_release:
   - 18.0
   - 18.1
   - 18.2
-before_script: mix local.rebar --force
+before_script:
+  - mix local.rebar --force
+  - nvm install 5.0
+  - nvm use 5.0
+  - npm install
+after_script: brunch b
 before_deploy: ./scripts/build-linux-releases.sh
 deploy:
   provider: releases
