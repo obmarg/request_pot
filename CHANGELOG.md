@@ -1,3 +1,9 @@
+0.1.1 (13/06/2016)
+---
+
+- Fixed building of frontend for releases on travis.  This means that there
+  should be an actual frontend on rqstpot.xyz.
+
 0.1.0 (08/06/2016)
 ---
 
