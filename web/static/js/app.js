@@ -29,6 +29,6 @@ channel.join()
 
 var elmDiv = document.getElementById('elm-main')
   , initialState = { requests: [] }
-  , elmApp = Elm.embed(Elm.RequestPot, elmDiv, initialState);
+  , elmApp = Elm.RequestPot.embed(elmDiv);
 
 channel.on('set_requests', data => elmApp.ports.requests.send(data.requests));

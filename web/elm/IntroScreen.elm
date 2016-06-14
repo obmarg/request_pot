@@ -1,8 +1,8 @@
-module IntroScreen (Model, init, Action, update, Context, view) where
+module IntroScreen exposing (Model, init, Msg, update, view)
 
-import Html exposing (div, p, button, br, h2, text, input)
-import Html.Attributes exposing (class, type')
-import Html.Events exposing (on, targetChecked, onClick)
+import Html exposing (div, p, button, br, h2, text, input, Html)
+import Html.Attributes exposing (class, type', checked)
+import Html.Events exposing (on, onClick, onCheck)
 
 -- Model
 
@@ -12,44 +12,30 @@ init = Model False
 
 -- Update
 
-type Action = SetPrivate | SetNotPrivate | Create
+type Msg = Private Bool | Create
 
-update : Action -> Model -> Model
-update action model =
-  case action of
-    SetPrivate ->
-      { model | private = True }
-
-    SetNotPrivate ->
-      { model | private = False }
+update : Msg -> Model -> Model
+update msg model =
+  case msg of
+    Private bool ->
+      { model | private = bool }
 
     Create ->
       model
 
 -- View
 
-type alias Context =
-  { actions: Signal.Address Action
-  , create: Signal.Address () }
-
-onCheck : Signal.Address Action -> Html.Attribute
-onCheck address =
-  let
-    boolToAction = \bool -> if bool then SetPrivate else SetNotPrivate
-  in
-    on "click" targetChecked (\bool -> Signal.message address (boolToAction bool))
-
-view : Context -> Html.Html
-view context =
+view : Model -> Html Msg
+view model =
   div [ class "jumbotron" ]
       [ h2 [] [ (text "Welcome to Request Pot!") ]
       , p [ class "lead" ] [ text "A requestb.in clone written using phoenix & elm."]
-      , successButton (onClick context.create ()) "Create a Pot"
+      , successButton (onClick Create) "Create a Pot"
       , br [] []
-      , input [ type' "checkbox", onCheck context.actions ] []
+      , input [ type' "checkbox", checked model.private, onCheck Private ] []
       , text "Private Pot (only viewable from this browser)"
       ]
 
-successButton : Html.Attribute -> String -> Html.Html
+successButton : Html.Attribute Msg -> String -> Html Msg
 successButton clickHandler btnText =
   button [ class "btn btn-success", clickHandler ] [ text btnText ]

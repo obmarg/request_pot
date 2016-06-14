@@ -1,24 +1,20 @@
-module RequestPot where
+port module RequestPot exposing (main)
 
-import Effects exposing (Effects, Never)
 import Html exposing (text)
-import StartApp
+import Html.App as Html
 
 import IntroScreen
 import PotScreen
 
 -- App
 
-app : StartApp.App Model
-app =
-  StartApp.start
+main =
+  Html.program
     { init = init
     , view = view
     , update = update
-    , inputs = [ incomingRequests ]
+    , subscriptions = subscriptions
     }
-
-main = app.html
 
 -- Model
 
@@ -29,30 +25,30 @@ type alias Model =
   , intro: IntroScreen.Model
   , pot: PotScreen.Model }
 
-init : (Model, Effects Action)
+init : (Model, Cmd Msg)
 init = ( Model IntroScreenActive IntroScreen.init PotScreen.init
-       , Effects.none
+       , Cmd.none
        )
 
 -- Update
 
-type Action
-  = IntroScreenAction IntroScreen.Action
+type Msg
+  = IntroScreenAction IntroScreen.Msg
   | Create
   | SetRequests (List String)
 
-update : Action -> Model -> (Model, Effects Action)
-update action model =
-  case action of
+update : Msg -> Model -> (Model, Cmd Msg)
+update msg model =
+  case msg of
     IntroScreenAction act ->
       ( { model |
           intro = IntroScreen.update act model.intro }
-      , Effects.none
+      , Cmd.none
       )
 
     Create ->
       ( { model | activeScreen = PotScreenActive }
-      , Effects.none
+      , Cmd.none
       )
 
     SetRequests requests ->
@@ -61,29 +57,22 @@ update action model =
         updatedPot = { pot | requests = requests }
       in
         ( { model | pot = updatedPot }
-        , Effects.none )
+        , Cmd.none )
 
 -- View
 
-view : Signal.Address Action -> Model -> Html.Html
-view address model =
+view : Model -> Html.Html Msg
+view model =
   case model.activeScreen of
     IntroScreenActive ->
-      let
-        context =
-          IntroScreen.Context
-            (Signal.forwardTo address IntroScreenAction)
-            (Signal.forwardTo address (always Create))
-      in
-        IntroScreen.view context
+      Html.map IntroScreenAction (IntroScreen.view model.intro)
 
     PotScreenActive ->
       PotScreen.view model.pot
 
--- Signals
+-- Subscriptions
 
-port requests : Signal (List String)
+port requests : (List String -> msg) -> Sub msg
 
-incomingRequests : Signal Action
-incomingRequests =
-  Signal.map SetRequests requests
+subscriptions : Model -> Sub Msg
+subscriptions model = requests SetRequests
