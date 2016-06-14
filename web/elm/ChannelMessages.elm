@@ -2,7 +2,7 @@ port module ChannelMessages exposing (..)
 
 import Dict exposing (Dict)
 import Json.Encode
-import Json.Decode exposing (Decoder, string, dict, int, null, map, (:=), andThen, oneOf, object2, object1, object4, list, bool, float, fail)
+import Json.Decode exposing (Decoder, string, dict, int, null, map, (:=), andThen, oneOf, object2, object1, object5, list, bool, float, fail)
 
 type alias Request =
   { method: String
@@ -22,6 +22,7 @@ type alias PotInfo =
   , private: Bool
   , time_created: Int
   , request_count: Int
+  , url: String
   }
 
 type IncomingChannelMessage
@@ -74,12 +75,13 @@ requestDecoder =
 
 potInfoDecoder : Decoder PotInfo
 potInfoDecoder =
-  object4
+  object5
     PotInfo
     ("name" := string)
     ("private" := bool)
     ("time_created" := int)
     ("request_count" := int)
+    ("url" := string)
 
 encodeOutgoing : OutgoingChannelMessage -> Json.Encode.Value
 encodeOutgoing msg =

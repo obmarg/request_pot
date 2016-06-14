@@ -1,27 +1,28 @@
-module PotScreen exposing (Model, init, view, Msg (SetRequests, IncomingRequest), update)
+module PotScreen exposing (Model, init, view, Msg (..), update)
 
 import List exposing (isEmpty, map)
 import Html exposing (Html, text, p, section, h4, input, div)
 import Html.Attributes exposing (class, style, type', value, readonly)
 
-import ChannelMessages exposing (Request)
+import ChannelMessages exposing (Request, PotInfo)
 
 -- Model
 
 type alias Requests = List Request
 
 type alias Model =
-  { requests: Requests }
+  { requests: Requests, potInfo: Maybe PotInfo }
 
 
 init : Model
-init = Model []
+init = Model [] Nothing
 
 -- Update
 
 type Msg
   = SetRequests Requests
   | IncomingRequest Request
+  | SetInfo PotInfo
 
 update : Msg -> Model -> Model
 update msg model =
@@ -30,6 +31,9 @@ update msg model =
       {model | requests = requests}
     IncomingRequest request ->
       {model | requests = request :: model.requests}
+    SetInfo info ->
+      {model | potInfo = Just info}
+
 
 -- View
 
@@ -39,17 +43,26 @@ view model =
     requestsView = if isEmpty model.requests
                    then viewNoRequests
                    else viewRequests model.requests
+    urlView = viewPotUrl model.potInfo
   in
-    div [ class "text-center" ] [ viewPotUrl, requestsView ]
+    div [ class "text-center" ] [ urlView, requestsView ]
 
-viewPotUrl : Html msg
-viewPotUrl = section []
-            [ h4 [] [ text "Pot URL" ]
-            , input [ type' "text"
-                    , value "http://localhost:4000/whatever"
-                    , readonly True
-                    , class "input-lg"] []
-            ]
+viewPotUrl : Maybe PotInfo -> Html msg
+viewPotUrl info =
+  let
+    url = case info of
+      Just potInfo ->
+        potInfo.url
+      Nothing -> ""
+  in
+    section []
+      [ h4 [] [ text "Pot URL" ]
+      , input [ type' "text"
+              , value url
+              , readonly True
+              , class "input-lg"] []
+      ]
+
 
 -- TODO: This needs to render some actual rows for the requests.
 -- can probably not bother with the actual request details for now.

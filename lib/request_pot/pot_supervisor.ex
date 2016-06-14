@@ -19,11 +19,7 @@ defmodule RequestPot.PotSupervisor do
   @doc false
   @spec add_pot(boolean) :: {:ok, PotInfo.t} | {:error, atom}
   def add_pot(private, pid \\ __MODULE__) do
-    info = %PotInfo{
-      name: new_pot_name,
-      private: private,
-      time_created: :erlang.monotonic_time()
-    }
+    info = %{PotInfo.from_name(new_pot_name) | private: private}
     case Supervisor.start_child(__MODULE__, [info]) do
       {:ok, child} -> {:ok, info}
       _ -> {:error, :unknown}

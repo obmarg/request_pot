@@ -73,8 +73,8 @@ update msg model =
           , Cmd.none)
 
         CreatePotResponse (Ok pot_info) ->
-          -- TODO: pass the pot_info to PotScreen
-          ({ model | activeScreen = PotScreenActive }
+          ({ model | activeScreen = PotScreenActive
+                   , pot = PotScreen.update (PotScreen.SetInfo pot_info) model.pot}
           , joinPotChannel pot_info.name
           )
 
