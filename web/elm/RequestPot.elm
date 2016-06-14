@@ -1,10 +1,13 @@
-port module RequestPot exposing (main)
+module RequestPot exposing (main)
 
 import Html exposing (text)
 import Html.App as Html
+import Json.Decode exposing (decodeValue)
+import Platform.Sub exposing (map)
 
 import IntroScreen
 import PotScreen
+import ChannelMessages exposing (..)
 
 -- App
 
@@ -32,32 +35,58 @@ init = ( Model IntroScreenActive IntroScreen.init PotScreen.init
 
 -- Update
 
+-- TODO: Do these belong in ChannelMessages.elm?
+createPot : Cmd msg
+createPot = CreatePot |> encodeOutgoing |> outgoing_message
+
+joinPotChannel : String -> Cmd msg
+joinPotChannel pot_name =
+  pot_name |> JoinPotChannel |> encodeOutgoing |> outgoing_message
+
 type Msg
-  = IntroScreenAction IntroScreen.Msg
-  | Create
-  | SetRequests (List String)
+  = IntroScreenMsg IntroScreen.Msg
+  | ChannelMessage (Result String IncomingChannelMessage)
 
 update : Msg -> Model -> (Model, Cmd Msg)
 update msg model =
   case msg of
-    IntroScreenAction act ->
-      ( { model |
-          intro = IntroScreen.update act model.intro }
+    IntroScreenMsg IntroScreen.Create ->
+      ( { model | intro = IntroScreen.update IntroScreen.Create model.intro }
+      , createPot
+      )
+
+    IntroScreenMsg msg ->
+      ( { model | intro = IntroScreen.update msg model.intro }
       , Cmd.none
       )
 
-    Create ->
-      ( { model | activeScreen = PotScreenActive }
-      , Cmd.none
-      )
+    ChannelMessage (Ok channel_message) ->
+      case channel_message of
+        IncomingRequest pot_name request ->
+          -- TODO: use pot_name to verify we care about this?
+          ({model | pot = PotScreen.update (PotScreen.IncomingRequest request) model.pot}
+          , Cmd.none)
 
-    SetRequests requests ->
-      let
-        pot = model.pot
-        updatedPot = { pot | requests = requests }
-      in
-        ( { model | pot = updatedPot }
-        , Cmd.none )
+        SetRequests pot_name requests ->
+          -- TODO: use pot_name to verify we care about this?
+          ({ model | pot = PotScreen.update (PotScreen.SetRequests requests) model.pot}
+          , Cmd.none)
+
+        CreatePotResponse (Ok pot_info) ->
+          -- TODO: pass the pot_info to PotScreen
+          ({ model | activeScreen = PotScreenActive }
+          , joinPotChannel pot_info.name
+          )
+
+        CreatePotResponse (Err error_string) ->
+          -- TODO: Display an error on IntroScreen
+          (model, Cmd.none)
+
+    ChannelMessage (Err string) ->
+      -- TODO: Display an error screen somehow...
+      --       Probably with a link to start again...
+      (model, Cmd.none)
+
 
 -- View
 
@@ -65,14 +94,13 @@ view : Model -> Html.Html Msg
 view model =
   case model.activeScreen of
     IntroScreenActive ->
-      Html.map IntroScreenAction (IntroScreen.view model.intro)
+      Html.map IntroScreenMsg (IntroScreen.view model.intro)
 
     PotScreenActive ->
       PotScreen.view model.pot
 
 -- Subscriptions
 
-port requests : (List String -> msg) -> Sub msg
 
 subscriptions : Model -> Sub Msg
-subscriptions model = requests SetRequests
+subscriptions model = map ChannelMessage (incoming_messages (decodeValue incomingDecoder))

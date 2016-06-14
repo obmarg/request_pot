@@ -1,12 +1,13 @@
-module PotScreen exposing (Model, init, view)
+module PotScreen exposing (Model, init, view, Msg (SetRequests, IncomingRequest), update)
 
 import List exposing (isEmpty, map)
 import Html exposing (Html, text, p, section, h4, input, div)
 import Html.Attributes exposing (class, style, type', value, readonly)
 
+import ChannelMessages exposing (Request)
+
 -- Model
 
-type alias Request = String
 type alias Requests = List Request
 
 type alias Model =
@@ -17,6 +18,18 @@ init : Model
 init = Model []
 
 -- Update
+
+type Msg
+  = SetRequests Requests
+  | IncomingRequest Request
+
+update : Msg -> Model -> Model
+update msg model =
+  case msg of
+    SetRequests requests ->
+      {model | requests = requests}
+    IncomingRequest request ->
+      {model | requests = request :: model.requests}
 
 -- View
 
@@ -47,7 +60,7 @@ viewRequests requests =
 
 viewRequest : Request -> Html msg
 viewRequest request =
-  p [] [ text ("A request! " ++ request) ]
+  p [] [ text ("A request! " ++ request.method) ]
 
 viewNoRequests : Html msg
 viewNoRequests =
