@@ -1,7 +1,7 @@
 module PotScreen exposing (Model, init, view, Msg (..), update)
 
 import List exposing (isEmpty, map)
-import Html exposing (Html, text, p, section, h4, input, div)
+import Html exposing (Html, text, p, section, h4, input, div, table, thead, tbody, tr, td, th, span)
 import Html.Attributes exposing (class, style, type', value, readonly)
 
 import ChannelMessages exposing (Request, PotInfo)
@@ -69,11 +69,42 @@ viewPotUrl info =
 -- can finalize that later.
 viewRequests : Requests -> Html msg
 viewRequests requests =
-  div [] (map viewRequest requests)
+  table [ class "table table-striped text-left" ] ([
+           thead [] [ tr []
+                        [ th [] [text "Method"]
+                        , th [] [text "Path"]
+                        , th [] [text "Content-Type"]
+                        , th [] [text "IP"]
+                        , th [] [text "Time"]
+                        ]
+                    ]
+          ] ++ [ tbody [] (map viewRequest requests) ])
 
 viewRequest : Request -> Html msg
 viewRequest request =
-  p [] [ text ("A request! " ++ request.method) ]
+  let
+    contentType =
+      case request.content_type of
+        Just contentType -> contentType
+        Nothing -> ""
+  in
+    tr [] [ td [] [methodLabel request.method]
+          , td [] [text request.path]
+          , td [] [text contentType]
+          , td [] [text request.remote_addr]
+          , td [] [text (toString request.time)]
+          ]
+
+methodLabel : String -> Html msg
+methodLabel method =
+  let
+    labelType = case method of
+                  "GET" -> "label-success"
+                  "DELETE" -> "label-danger"
+                  _ -> "label-primary"
+  in
+    span [ class ("label " ++ labelType) ] [text method]
+
 
 viewNoRequests : Html msg
 viewNoRequests =
