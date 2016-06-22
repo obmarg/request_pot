@@ -19,7 +19,7 @@ defmodule RequestPot.Mixfile do
     [mod: {RequestPot, []},
      applications: [
        :phoenix, :phoenix_html, :cowboy, :logger, :gettext, :gproc,
-       :uuid
+       :uuid, :exometer_datadog, :elixometer
      ]
     ]
   end
@@ -38,10 +38,13 @@ defmodule RequestPot.Mixfile do
      {:gettext, "~> 0.9"},
      {:cowboy, "~> 1.0"},
      {:gproc, "~> 0.5.0"},
-     {:poison, "~> 2.1"},
+     {:poison, "~> 2.0"},
      {:uuid, "~> 1.1"},
 
-     {:exrm, "~> 1.0"}
+     {:exrm, "~> 1.0"},
+
+     {:exometer_datadog, "~> 0.4"},
+     {:elixometer, "~> 1.2.1"}
     ]
   end
 end

@@ -19,6 +19,18 @@ config :logger, :console,
   format: "$time $metadata[$level] $message\n",
   metadata: [:request_id]
 
+config :exometer_datadog,
+  api_key: {:system, "DATADOG_API_KEY"},
+  report_vm_metrics: true,
+  report_system_metrics: true,
+  metric_prefix: [:request_pot, Mix.env]
+
+config :elixometer,
+  reporter: ExometerDatadog.Reporter,
+  env: Mix.env,
+  metric_prefix: "request_pot",
+  update_frequency: 1000
+
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
 import_config "#{Mix.env}.exs"

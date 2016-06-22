@@ -22,6 +22,8 @@ defmodule RequestPot.Endpoint do
   plug Plug.RequestId
   plug Plug.Logger
 
+  plug RequestPot.Plugs.RequestMetrics
+
   plug Plug.Parsers,
     parsers: [:urlencoded, :multipart],
     pass: ["*/*"]
