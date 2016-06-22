@@ -8,7 +8,7 @@ defmodule RequestPot.Endpoint do
   # You should set gzip to true if you are running phoenix.digest
   # when deploying your static files in production.
   plug Plug.Static,
-    at: "/", from: :request_pot, gzip: false,
+    at: "/", from: :request_pot, gzip: true,
     only: ~w(css fonts images js favicon.ico robots.txt)
 
   # Code reloading can be explicitly enabled under the
@@ -33,6 +33,8 @@ defmodule RequestPot.Endpoint do
     store: :cookie,
     key: "_request_pot_key",
     signing_salt: "oUPtlA4i"
+
+  plug RequestPot.Plugs.UserID
 
   plug RequestPot.Router
 end

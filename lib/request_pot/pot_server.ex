@@ -8,7 +8,7 @@ defmodule RequestPot.PotServer do
 
   @max_requests 20
 
-  alias RequestPot.PotInfo
+  alias RequestPot.{PotInfo, PotChannel}
   alias RequestPot.PotServer.Terminator
 
   def info(name) do
@@ -54,6 +54,10 @@ defmodule RequestPot.PotServer do
 
   def handle_call({:incoming_request, request}, _from, state) do
     requests = Enum.take([request | state.requests], @max_requests)
+
+    PotChannel.incoming_request(
+      state.starting_info.name, Map.from_struct(request)
+    )
 
     {:reply, :ok, %{state | requests: requests}}
   end

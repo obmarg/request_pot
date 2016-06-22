@@ -38,6 +38,7 @@ defmodule RequestPot.Mixfile do
      {:cowboy, "~> 1.0"},
      {:gproc, "~> 0.5.0"},
      {:poison, "~> 2.1"},
+     {:uuid, "~> 1.1"},
 
      {:exrm, "~> 1.0"}
     ]

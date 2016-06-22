@@ -1,28 +1,65 @@
 defmodule RequestPot.PotChannelTest do
   use RequestPot.ChannelCase
 
-  alias RequestPot.PotChannel
+  alias RequestPot.{PotChannel, PotServer, PotInfo, Request}
+
+  @pot_name "pot_channel_test_pot"
+  @test_request %Request{method: "GET"}
 
   setup do
-    {:ok, _, socket} =
-      socket("user_id", %{some: :assign})
+    {:ok, _pid} = @pot_name |> PotInfo.from_name |> PotServer.start_link
+    PotServer.incoming_request(@pot_name, @test_request)
+
+    user_id = UUID.uuid4
+
+    {:ok, _, lobby_socket} =
+      socket("user_id", %{user: user_id})
       |> subscribe_and_join(PotChannel, "pot:lobby")
 
-    {:ok, socket: socket}
+    {:ok, _, pot_socket} =
+      socket("user_id", %{user: user_id})
+      |> subscribe_and_join(PotChannel, "pot:#{@pot_name}")
+
+    {:ok, socket: lobby_socket, pot_socket: pot_socket}
   end
 
-  test "ping replies with status ok", %{socket: socket} do
-    ref = push socket, "ping", %{"hello" => "there"}
-    assert_reply ref, :ok, %{"hello" => "there"}
+  test "create_pot on lobby creates a pot", %{socket: socket} do
+    ref = push socket, "create_pot", %{}
+
+    assert_reply ref, :ok, %{"pot" => pot}
+    assert pot.request_count == 0
+    assert pot.private == false
+    assert pot.name
+    assert PotServer.exists?(pot.name)
   end
 
-  test "shout broadcasts to pot:lobby", %{socket: socket} do
-    push socket, "shout", %{"hello" => "all"}
-    assert_broadcast "shout", %{"hello" => "all"}
+  test "create_pot can create a private pot", %{socket: socket} do
+    ref = push socket, "create_pot", %{"private" => true}
+
+    assert_reply ref, :ok, %{"pot" => pot}
+    assert pot.request_count == 0
+    assert pot.private == true
+    assert pot.name
+    assert PotServer.exists?(pot.name)
   end
 
-  test "broadcasts are pushed to the client", %{socket: socket} do
-    broadcast_from! socket, "broadcast", %{"some" => "data"}
-    assert_push "broadcast", %{"some" => "data"}
+  test "create_pot outwith lobby does nothing", %{pot_socket: socket} do
+    ref = push socket, "create_pot", %{}
+    refute_reply ref, :ok, %{"pot" => pot}
+  end
+
+  test "can't join channel for missing pot" do
+    assert {:error, %{reason: "missing_pot"}} =
+      socket("user_id", %{user: UUID.uuid4})
+      |> subscribe_and_join(PotChannel, "pot:missing")
+  end
+
+  test "incoming_request broadcasts to all pot members", %{pot_socket: socket} do
+    PotChannel.incoming_request(@pot_name, %{test: "test"})
+    assert_broadcast "incoming_request", %{test: "test"}
+  end
+
+  test "sends a set_request message on pot channel join", %{pot_socket: socket} do
+    assert_push "set_requests", %{requests: [@test_request]}
   end
 end

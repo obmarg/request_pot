@@ -1,7 +1,7 @@
 defmodule RequestPot.PotServerTest do
   use ExUnit.Case
 
-  alias RequestPot.{PotInfo, PotServer}
+  alias RequestPot.{PotInfo, PotServer, Request}
 
   @server_name "test_server"
   @server_info %PotInfo{name: @server_name}
@@ -29,8 +29,11 @@ defmodule RequestPot.PotServerTest do
   end
 
   test "pot server can store incoming requests" do
-    PotServer.incoming_request(@server_name, :test1)
-    PotServer.incoming_request(@server_name, :test2)
-    assert PotServer.requests(@server_name) == [:test2, :test1]
+    PotServer.incoming_request(@server_name, %Request{method: "test1"})
+    PotServer.incoming_request(@server_name, %Request{method: "test2"})
+    assert PotServer.requests(@server_name) == [
+      %Request{method: "test2"},
+      %Request{method: "test1"}
+    ]
   end
 end
