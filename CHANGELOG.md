@@ -1,3 +1,11 @@
+0.2.0 (23/06/2016)
+---
+
+- Upgrade to elm 0.17
+- Hook frontend up to backend via channels.
+- Display correct URL on pot screen.
+- Configure prod host & scheme properly.
+
 0.1.2 (13/06/2016)
 ---
 
