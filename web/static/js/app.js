@@ -29,7 +29,8 @@ lobbyChannel.join()
 
 var elmDiv = document.getElementById('elm-main')
   , initialState = { requests: [] }
-  , elmApp = Elm.RequestPot.embed(elmDiv)
+  , elm = require('../../elm/RequestPot')
+  , elmApp = elm.RequestPot.embed(elmDiv)
   , potChannel = null;
 
 elmApp.ports.outgoing_message.subscribe(function (value){

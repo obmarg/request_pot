@@ -8,13 +8,14 @@ otp_release:
   - 18.2
 before_script:
   - mix local.rebar --force
-  - nvm install 5.0
-  - nvm use 5.0
+  - nvm install 6.0
+  - nvm use 6.0
+  - npm upgrade --global npm
   - npm install
   - export PATH=$PATH:$PWD/node_modules/.bin/
 script:
   - mix test
-  - brunch b
+  - npm run compile_dev
 before_deploy: ./scripts/build-linux-releases.sh
 deploy:
   provider: releases
