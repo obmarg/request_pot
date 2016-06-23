@@ -1,3 +1,9 @@
+0.2.4 (24/06/2016)
+---
+
+- Client IP addresses in request list now reported correctly.
+- Pot URLs will no longer be be generated with an incorrect port.
+
 0.2.3 (23/06/2016)
 ---
 
