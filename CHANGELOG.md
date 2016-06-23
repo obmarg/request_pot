@@ -1,3 +1,9 @@
+0.2.2 (23/06/2016)
+---
+
+- Fixes a regression in 0.2.0 & 0.2.1 where published releases did not contain
+  minified javascript.
+
 0.2.1 (23/06/2016)
 ---
 

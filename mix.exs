@@ -3,7 +3,7 @@ defmodule RequestPot.Mixfile do
 
   def project do
     [app: :request_pot,
-     version: "0.2.1",
+     version: "0.2.2",
      elixir: "~> 1.0",
      elixirc_paths: elixirc_paths(Mix.env),
      compilers: [:phoenix, :gettext] ++ Mix.compilers,
