@@ -1,3 +1,9 @@
+0.2.1 (23/06/2016)
+---
+
+- Add uuid to applications.  This was preventing builds from being made on
+  0.2.0
+
 0.2.0 (23/06/2016)
 ---
 
