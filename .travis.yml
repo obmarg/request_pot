@@ -15,7 +15,7 @@ before_script:
   - export PATH=$PATH:$PWD/node_modules/.bin/
 script:
   - mix test
-  - npm run compile_dev
+  - travis_wait npm run compile_dev
 before_deploy: ./scripts/build-linux-releases.sh
 deploy:
   provider: releases
