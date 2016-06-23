@@ -1,3 +1,11 @@
+0.2.3 (23/06/2016)
+---
+
+- SECRET_KEY_BASE now requires RELX_REPLACE_OS_VARS=true to work.  v0.2.2
+  did not seem to like the `{:system, SECRET_KEY_BASE}` setting that was used
+  before.
+  Technically this is a breaking change, but I'm the only user so never mind.
+
 0.2.2 (23/06/2016)
 ---
 
