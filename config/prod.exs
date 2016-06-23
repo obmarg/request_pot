@@ -13,7 +13,7 @@ use Mix.Config
 # which you typically run after static files are built.
 config :request_pot, RequestPot.Endpoint,
   http: [port: {:system, "PORT"}],
-  url: [host: "rqstpot.xyz", scheme: "https"],
+  url: [host: "rqstpot.xyz", scheme: "https", port: "443"],
   cache_static_manifest: "priv/static/manifest.json"
 
 # Do not print debug messages in production

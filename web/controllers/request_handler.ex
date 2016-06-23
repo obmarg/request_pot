@@ -29,7 +29,7 @@ defmodule RequestPot.RequestHandler do
       form_data: body_params,
       json_data: maybe_parse_json(content_type, body),
       body: body,
-      remote_addr: peer_to_string(conn.peer),
+      remote_addr: ip_to_string(conn.remote_ip),
       time: :erlang.system_time(:seconds),
     }
 
@@ -46,7 +46,7 @@ defmodule RequestPot.RequestHandler do
     send_resp(conn, 404, "No Pot Found")
   end
 
-  defp peer_to_string({{a, b, c, d}, _port}) do
+  defp ip_to_string({a, b, c, d}) do
     "#{a}.#{b}.#{c}.#{d}"
   end
 
