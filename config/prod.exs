@@ -67,5 +67,5 @@ if File.exists?("config/prod.secret.exs") do
 else
   # If we don't have a prod.secret.exs load from environment.
   config :request_pot, RequestPot.Endpoint,
-    secret_key_base: {:system, "SECRET_KEY_BASE"}
+    secret_key_base: "${SECRET_KEY_BASE}"
 end
