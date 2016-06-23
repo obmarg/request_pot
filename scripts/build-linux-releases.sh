@@ -1,7 +1,7 @@
 #!/bin/bash
 rm rel/relx.config
 
-npm compile
+npm run compile
 MIX_ENV=prod mix compile
 MIX_ENV=prod mix phoenix.digest
 
