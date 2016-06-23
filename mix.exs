@@ -18,7 +18,8 @@ defmodule RequestPot.Mixfile do
   def application do
     [mod: {RequestPot, []},
      applications: [
-       :phoenix, :phoenix_html, :cowboy, :logger, :gettext, :gproc
+       :phoenix, :phoenix_html, :cowboy, :logger, :gettext, :gproc,
+       :uuid
      ]
     ]
   end
