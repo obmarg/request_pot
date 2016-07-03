@@ -66,18 +66,16 @@ elmApp.ports.outgoing_message.subscribe(function (value){
         }
         potChannel = socket.channel("pot:" + value.pot_name, {});
         potChannel.join()
-            .receive("ok", resp => { console.log("Joined successfully", resp); })
-            .receive("error", resp => { console.log("Unable to join", resp); });
-
-        potChannel.on(
-            "set_requests",
-            msg =>
+            .receive("ok", resp => {
+                console.log("Joined successfully", resp);
                 elmApp.ports.incoming_messages.send({
                     "tag": "set_requests",
                     "pot_name": value.pot_name,
-                    "requests": msg.requests
-                })
-        );
+                    "requests": resp.requests
+                });
+            })
+            .receive("error", resp => { console.log("Unable to join", resp); });
+
         potChannel.on(
             "incoming_request",
             msg =>
@@ -90,5 +88,3 @@ elmApp.ports.outgoing_message.subscribe(function (value){
         break;
     }
 });
-
-lobbyChannel.on('set_requests', data => elmApp.ports.requests.send(data.requests));

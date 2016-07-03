@@ -59,7 +59,11 @@ defmodule RequestPot.PotChannelTest do
     assert_broadcast "incoming_request", %{test: "test"}
   end
 
-  test "sends a set_request message on pot channel join", %{pot_socket: socket} do
-    assert_push "set_requests", %{requests: [@test_request]}
+  test "existing requests passed down in pot channel join response" do
+    {:ok, payload, pot_socket} =
+      socket("user_id_2", %{user: UUID.uuid4})
+      |> subscribe_and_join(PotChannel, "pot:#{@pot_name}")
+
+    assert payload == %{requests: [@test_request]}
   end
 end
