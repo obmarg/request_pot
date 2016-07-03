@@ -31,6 +31,13 @@ defmodule RequestPot.UserSocket do
     end
   end
 
+  def connect(_params, socket) do
+    # If users don't provide a token, let them in anyway with a random UUID.
+    # Tokens are relatively trivial to get from the initial HTML, so there's little
+    # point in enforcing them.
+    {:ok, assign(socket, :user, UUID.uuid4)}
+  end
+
   # Socket id's are topics that allow you to identify all sockets for a given user:
   #
   #     def id(socket), do: "users_socket:#{socket.assigns.user_id}"
