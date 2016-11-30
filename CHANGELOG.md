@@ -1,3 +1,8 @@
+0.3.1 (30/11/2016)
+---
+
+- Fixed an issue with Elm build silently failing.
+
 0.3.0 (30/11/2016)
 ---
 
