@@ -6,12 +6,27 @@ otp_release:
   - 18.0
   - 18.1
   - 18.2
+cache:
+  - sysconfcpus
+before_install:
+  - | # epic build time improvement - see https://github.com/elm-lang/elm-compiler/issues/1473#issuecomment-245704142
+    if [ ! -d sysconfcpus/bin ];
+    then
+      git clone https://github.com/obmarg/libsysconfcpus.git;
+      cd libsysconfcpus;
+      ./configure --prefix=$TRAVIS_BUILD_DIR/sysconfcpus;
+      make && make install;
+      cd ..;
+    fi
 before_script:
   - mix local.rebar --force
   - nvm install 6.0
   - nvm use 6.0
   - npm upgrade --global npm
   - npm install
+  - mv node_modules/.bin/elm-make node_modules/.bin/elm-make-old
+  - echo "#\!/bin/bash\\n\\necho \"Running elm-make with sysconfcpus -n 2\"\\n\\n$TRAVIS_BUILD_DIR/sysconfcpus/bin/sysconfcpus -n 2 elm-make-old \"\$@\"" > node_modules/.bin/elm-make
+  - chmod +x node_modules/.bin/elm-make
   - export PATH=$PATH:$PWD/node_modules/.bin/
 script:
   - mix test
