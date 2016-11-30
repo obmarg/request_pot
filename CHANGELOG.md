@@ -1,3 +1,13 @@
+0.3.0 (30/11/2016)
+---
+
+- All current messages now sent down to client when they join a pot channel.
+- If users connect to a channel without an auth token we now assign them a
+  random UUID. This should make it easier for non-web clients to interact with
+  request_pot.
+- Added a datadog integration with elixometer & exometer datadog.
+- Response times are logged using the above integration.
+
 0.2.4 (24/06/2016)
 ---
 
