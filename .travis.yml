@@ -24,13 +24,10 @@ before_script:
   - nvm use 6.0
   - npm upgrade --global npm
   - npm install
-  - mv node_modules/.bin/elm-make node_modules/.bin/elm-make-old
-  - echo "#\!/bin/bash\\n\\necho \"Running elm-make with sysconfcpus -n 2\"\\n\\n$TRAVIS_BUILD_DIR/sysconfcpus/bin/sysconfcpus -n 2 elm-make-old \"\$@\"" > node_modules/.bin/elm-make
-  - chmod +x node_modules/.bin/elm-make
   - export PATH=$PATH:$PWD/node_modules/.bin/
 script:
   - mix test
-  - travis_wait npm run compile_dev
+  - $TRAVIS_BUILD_DIR/sysconfcpus/bin/sysconfcpus -n 1 npm run compile_dev
 before_deploy: ./scripts/build-linux-releases.sh
 deploy:
   provider: releases
