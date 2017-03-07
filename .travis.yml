@@ -1,11 +1,14 @@
 language: elixir
 elixir:
-  - 1.2.6
-  - 1.3.0-rc.0
+  - 1.3.4
+  - 1.4.2
 otp_release:
-  - 18.0
-  - 18.1
   - 18.2
+  - 19.2
+matrix:
+  exclude:
+    - elixir: 1.4.2
+      otp_release: 18.2
 cache:
   - sysconfcpus
 before_install:
