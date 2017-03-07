@@ -14,7 +14,8 @@ use Mix.Config
 config :request_pot, RequestPot.Endpoint,
   http: [port: {:system, "PORT"}],
   url: [host: "rqstpot.xyz", scheme: "https", port: "443"],
-  cache_static_manifest: "priv/static/manifest.json"
+  cache_static_manifest: "priv/static/manifest.json",
+  force_ssl: [rewrite_on: [:x_forwarded_proto]]
 
 # Do not print debug messages in production
 config :logger, level: :info
@@ -67,5 +68,5 @@ if File.exists?("config/prod.secret.exs") do
 else
   # If we don't have a prod.secret.exs load from environment.
   config :request_pot, RequestPot.Endpoint,
-    secret_key_base: "${SECRET_KEY_BASE}"
+    secret_key_base: System.get_env("SECRET_KEY_BASE") || "${SECRET_KEY_BASE}"
 end
