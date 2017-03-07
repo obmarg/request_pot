@@ -5,7 +5,8 @@ defmodule RequestPot.UserSocket do
   channel "pot:*", RequestPot.PotChannel
 
   ## Transports
-  transport :websocket, Phoenix.Transports.WebSocket
+  transport :websocket, Phoenix.Transports.WebSocket,
+    timeout: 45_000
   # transport :longpoll, Phoenix.Transports.LongPoll
 
   # Max token age of 2 weeks.
