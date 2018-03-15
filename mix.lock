@@ -15,7 +15,7 @@
   "getopt": {:hex, :getopt, "0.8.2", "b17556db683000ba50370b16c0619df1337e7af7ecbf7d64fbf8d1d6bce3109b", [:rebar], []},
   "gettext": {:hex, :gettext, "0.9.0", "b732430dce0cbb3e370d89cdf6a7dbe48647a708f92754262601b62a0eb47e6f", [:mix], []},
   "goldrush": {:hex, :goldrush, "0.1.9", "f06e5d5f1277da5c413e84d5a2924174182fb108dabb39d5ec548b27424cd106", [:rebar3], []},
-  "gproc": {:hex, :gproc, "0.5.0", "2df2d886f8f8a7b81a4b04aa17972b5965bbc5bf0100ea6d8e8ac6a0e7389afe", [:rebar], []},
+  "gproc": {:hex, :gproc, "0.6.1", "4579663e5677970758a05d8f65d13c3e9814ec707ad51d8dcef7294eda1a730c", [:rebar3], [], "hexpm"},
   "hackney": {:hex, :hackney, "1.6.0", "8d1e9440c9edf23bf5e5e2fe0c71de03eb265103b72901337394c840eec679ac", [:rebar3], [{:certifi, "0.4.0", [hex: :certifi, optional: false]}, {:idna, "1.2.0", [hex: :idna, optional: false]}, {:metrics, "1.0.1", [hex: :metrics, optional: false]}, {:mimerl, "1.0.2", [hex: :mimerl, optional: false]}, {:ssl_verify_fun, "1.1.0", [hex: :ssl_verify_fun, optional: false]}]},
   "httpoison": {:hex, :httpoison, "0.8.3", "b675a3fdc839a0b8d7a285c6b3747d6d596ae70b6ccb762233a990d7289ccae4", [:mix], [{:hackney, "~> 1.6.0", [hex: :hackney, optional: false]}]},
   "idna": {:hex, :idna, "1.2.0", "ac62ee99da068f43c50dc69acf700e03a62a348360126260e87f2b54eced86b2", [:rebar3], []},
