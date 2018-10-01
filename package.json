@@ -2,7 +2,7 @@
   "repository": {},
   "license": "MIT",
   "dependencies": {
-    "elm": "^0.17.0",
+    "elm": "^0.19.0",
     "phoenix": "file:deps/phoenix",
     "phoenix_html": "file:deps/phoenix_html"
   },
