@@ -44,7 +44,7 @@ defmodule RequestPot.Mixfile do
      {:exrm, "~> 1.0"},
 
      {:exometer_datadog, "~> 0.4"},
-     {:elixometer, "~> 1.2.1"},
+     {:elixometer, "~> 1.3.0"},
 
      {:lager, "~> 3.6.1", override: true}
     ]
